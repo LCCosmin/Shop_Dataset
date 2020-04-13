@@ -37,8 +37,12 @@ void addprod(ProductRepo& repo)
 {
 	int id;
 	int type;
+	int type_dev;
 	char model_s[100];
 	char customer_name_s[100];
+	char website[100];
+	char deliveryMethod[100];
+	char shop[100];
 	
 	date_c date;
 	//CHECK ID
@@ -81,9 +85,51 @@ void addprod(ProductRepo& repo)
 	//GET CUSTOMER_NAME
 	cout << string(100, '\n');
 	cout << "Please enter the customer name:\n";
-
 	cin.getline(customer_name_s, 100, '\n');
 
+	//GET ONLINE ORDER
+	//read website
+	cout << string(100, '\n');
+	cout << "Please enter the website name:\n";
+	cin.getline(website, 100, '\n');
+
+	//read delivery method
+	do
+	{
+		cout << string(100, '\n');
+		cout << "Here is a list of all types:";
+		cout << "\n1.FAN-COURIER(3 DAYS WAITING, EXTRA 20$)";
+		cout << "\n2.PICK-UP AT LOCAL STORE(7 DAYS WAITING, EXTRA 10$)";
+		cout << "\n3.PICK-UP AT LOCAL STORE(10 DAYS WAITING, FREE)";
+		cout << "\nEnter a number between 1 - 3 that will represent the type:\n";
+		cin >> type_dev;
+		cin.get();
+		if (!isValidType(type_dev))
+		{
+			cout << string(100, '\n');
+			cout << "\nInvalid order type, hit THE ENTER KEY in order to continue";
+			cin.ignore();
+		}
+	} while (!isValidType(type_dev));
+	switch (type_dev)
+	{
+		case 1:
+			strcpy_s(deliveryMethod, "FAN-COURIER(3 DAYS WAITING, EXTRA 20$)");
+			break;
+		case 2:
+			strcpy_s(deliveryMethod, "PICK-UP AT LOCAL STORE(7 DAYS WAITING, EXTRA 10$)");
+			break;
+		case 3:
+			strcpy_s(deliveryMethod, "PICK-UP AT LOCAL STORE(10 DAYS WAITING, FREE)");
+			break;
+	}
+
+	//GET OFFLINE ORDER
+	//read shop
+	cout << string(100, '\n');
+	cout << "Please enter the shop name:\n";
+	cin.getline(shop, 100, '\n');
+	
 	//CHECK DATE
 	//YEAR
 	do
@@ -126,8 +172,10 @@ void addprod(ProductRepo& repo)
 		}
 	} while (!isValidDay(date));
 	cout << string(100, '\n');
-	
-	Product product(id,type, model_s, customer_name_s, date);
+
+	OnlineOrder on(website, deliveryMethod);
+	OfflineOrder off(shop);
+	Product product(id,type, model_s, customer_name_s, date, on, off);
 	repo.addProduct(product);
 
 	cout << "\n\nProduct added succesfully !\n\n";
@@ -166,6 +214,10 @@ void updateprod(ProductRepo &repo)
 	if (id != 0) {
 		cout << string(100, '\n');
 		int type;
+		int type_dev;
+		char website[100];
+		char deliveryMethod[100];
+		char shop[100];
 		char model_s[100];
 		char customer_name_s[100];
 
@@ -180,6 +232,7 @@ void updateprod(ProductRepo &repo)
 			cout << "\n3.EARING";
 			cout << "\nEnter a number between 1 - 3 that will represent the type:\n";
 			cin >> type;
+			cin.get();
 			if (!isValidType(type))
 			{
 				cout << "\nInvalid order type, hit THE ENTER KEY in order to continue";
@@ -189,14 +242,55 @@ void updateprod(ProductRepo &repo)
 		//GET MODEL
 		cout << string(100, '\n');
 		cout << "Please enter the model name:\n";
-		cin.get();
 		cin.getline(model_s, 100, '\n');
 
 		//GET CUSTOMER_NAME
 		cout << string(100, '\n');
 		cout << "Please enter the customer name:\n";
-
 		cin.getline(customer_name_s, 100, '\n');
+
+		//GET ONLINE ORDER
+		//read website
+		cout << string(100, '\n');
+		cout << "Please enter the website name:\n";
+		cin.getline(website, 100, '\n');
+
+		//read delivery method
+		do
+		{
+			cout << string(100, '\n');
+			cout << "Please choose the delivery method, here is a list of all methods available:";
+			cout << "\n1.FAN-COURIER(3 DAYS WAITING, EXTRA 20$)";
+			cout << "\n2.PICK-UP AT LOCAL STORE(7 DAYS WAITING, EXTRA 10$)";
+			cout << "\n3.PICK-UP AT LOCAL STORE(10 DAYS WAITING, FREE)";
+			cout << "\nEnter a number between 1 - 3 that will represent the type:\n";
+			cin >> type_dev;
+			cin.get();
+			if (!isValidType(type_dev))
+			{
+				cout << string(100, '\n');
+				cout << "\nInvalid order type, hit THE ENTER KEY in order to continue";
+				cin.ignore();
+			}
+		} while (!isValidType(type_dev));
+		switch (type_dev)
+		{
+		case 1:
+			strcpy_s(deliveryMethod, "FAN-COURIER(3 DAYS WAITING, EXTRA 20$)");
+			break;
+		case 2:
+			strcpy_s(deliveryMethod, "PICK-UP AT LOCAL STORE(7 DAYS WAITING, EXTRA 10$)");
+			break;
+		case 3:
+			strcpy_s(deliveryMethod, "PICK-UP AT LOCAL STORE(10 DAYS WAITING, FREE)");
+			break;
+		}
+
+		//GET OFFLINE ORDER
+		//read shop
+		cout << string(100, '\n');
+		cout << "Please enter the shop name:\n";
+		cin.getline(shop, 100, '\n');
 
 		//CHECK DATE
 		//YEAR
@@ -205,9 +299,9 @@ void updateprod(ProductRepo &repo)
 			cout << string(100, '\n');
 			cout << "Please enter the due year:\n";
 			cin >> date.an;
+			cin.get();
 			if (date.an < 0)
 			{
-				cin.get();
 				cout << "\nInvalid due year, hit THE ENTER KEY in order to continue";
 				cin.ignore();
 			}
@@ -218,6 +312,7 @@ void updateprod(ProductRepo &repo)
 			cout << string(100, '\n');
 			cout << "Please enter the due month:\n";
 			cin >> date.luna;
+			cin.get();
 			if (date.luna < 1 || date.luna > 12)
 			{
 				cout << "\nInvalid due month, hit THE ENTER KEY in order to continue";
@@ -230,16 +325,19 @@ void updateprod(ProductRepo &repo)
 			cout << string(100, '\n');
 			cout << "Please enter the due day:\n";
 			cin >> date.zi;
+			cin.get();
 			if (!isValidDay(date))
 			{
 				cout << "\nInvalid due day, hit THE ENTER KEY in order to continue";
 				cin.ignore();
 			}
 		} while (!isValidDay(date));
-		cout << string(100, '\n');
-		cin.get();
-		repo.updateProduct(id, type, model_s, customer_name_s, date);
 
+		OnlineOrder on(website, deliveryMethod);
+		OfflineOrder off(shop);
+		repo.updateProduct(id, type, model_s, customer_name_s, date, on, off);
+
+		cout << string(100, '\n');
 		cout << "\n\nProduct updated succesfully !\n\n";
 		cout << "\n\nPlease hit ENTER to continue.";
 		cin.ignore();

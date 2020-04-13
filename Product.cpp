@@ -1,11 +1,14 @@
 #include "Product.h"
 
-Product::Product(int id,int type,char *model,char *customer_name,date_c date)
+Product::Product(int id,int type,char *model,char *customer_name,date_c date, OnlineOrder on, OfflineOrder off)
 {
 	this->m_id = id;
 	this->m_type = type;
 	strcpy_s(this->m_model, model);
 	strcpy_s(this->m_customer_name, customer_name);
+	m_on.setWeb(on.getWeb());
+	m_on.setDM(on.getDM());
+	m_off.setShop(off.getShop());
 	setDate(date);
 }
 
@@ -35,6 +38,18 @@ void Product::setType(const int type)
 {
 	m_type = type;
 }
+
+void Product::setOO(OnlineOrder on)
+{
+	m_on.setWeb(on.getWeb());
+	m_on.setDM(on.getDM());
+}
+
+void Product::setOFO(OfflineOrder off)
+{
+	m_off.setShop(off.getShop());
+}
+
 
 bool Product::isSubString(char *subname)
 {

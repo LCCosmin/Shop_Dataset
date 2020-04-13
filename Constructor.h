@@ -1,5 +1,6 @@
 #ifndef CONSTRUCTOR_H
 #define CONSTRUCTOR_H
+#include "ProductRepo.h"
 
 void display_menu();
 void begin(ProductRepo& repo);

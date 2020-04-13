@@ -43,6 +43,8 @@ void ProductRepo::addProduct(Product& prod)
 	productRepo[c_index].setCN(prod.getCN());
 	productRepo[c_index].setID(prod.getID());
 	productRepo[c_index].setType(prod.getType());
+	productRepo[c_index].setOO(prod.getOO());
+	productRepo[c_index].setOFO(prod.getOFO());
 
 	undo_count++;
 	if (undo_count == undo_times * multiply)
@@ -102,6 +104,8 @@ void ProductRepo::removeProduct(int id)
 	productUndo[u_index].setCN(productRepo[i].getCN());
 	productUndo[u_index].setID(productRepo[i].getID());
 	productUndo[u_index].setType(productRepo[i].getType());
+	productUndo[u_index].setOO(productRepo[i].getOO());
+	productUndo[u_index].setOFO(productRepo[i].getOFO());
 	
 	//undo stuff done
 
@@ -125,7 +129,7 @@ void ProductRepo::removeProduct(int id)
 	//delete stuff done
 }
 
-void ProductRepo::updateProduct(int id, int type, char *model, char *customer_name, date_c date)
+void ProductRepo::updateProduct(int id, int type, char *model, char *customer_name, date_c date, OnlineOrder on, OfflineOrder off)
 {
 	int test = 0;
 
@@ -171,6 +175,8 @@ void ProductRepo::updateProduct(int id, int type, char *model, char *customer_na
 	productUndo[u_index].setCN(productRepo[k].getCN());
 	productUndo[u_index].setID(productRepo[k].getID());
 	productUndo[u_index].setType(productRepo[k].getType());
+	productUndo[u_index].setOO(productRepo[k].getOO());
+	productUndo[u_index].setOFO(productRepo[k].getOFO());
 
 	//undo stuff done
 
@@ -185,6 +191,8 @@ void ProductRepo::updateProduct(int id, int type, char *model, char *customer_na
 			productRepo[i].setCN(customer_name);
 			productRepo[i].setModel(model);
 			productRepo[i].setType(type);
+			productRepo[i].setOO(on);
+			productRepo[i].setOFO(off);
 			test = 1;
 		}
 	}
@@ -237,6 +245,9 @@ void ProductRepo::displayByName(char* subname)
 			cout << "\nName of the customer: " << prods[i].getCN();
 			cout << "\nThe wanted type: " << getType(prods[i].getType());
 			cout << "\nThe wanted model: " << prods[i].getModel();
+			cout << "\nThe website for the ONLINE ORDER: " << prods[i].getOO().getWeb();
+			cout << "\nThe choosed delivery method: " << prods[i].getOO().getDM();
+			cout << "\nThe shop for the OFFLINE ORDER: " << prods[i].getOFO().getShop();
 			cout << "\nThe due date: " << prods[i].getDate().zi << " / " << prods[i].getDate().luna << " / " << prods[i].getDate().an << endl << endl;
 		}
 		cout << "\n\nPlease hit ENTER to continue.";
@@ -267,6 +278,9 @@ void ProductRepo::displayByModelAndDate(char* model, date_c sdate)
 			cout << "\nName of the customer: " << productRepo[i].getCN();
 			cout << "\nThe wanted type: " << getType(productRepo[i].getType());
 			cout << "\nThe wanted model: " << productRepo[i].getModel();
+			cout << "\nThe website for the ONLINE ORDER: " << productRepo[i].getOO().getWeb();
+			cout << "\nThe choosed delivery method: " << productRepo[i].getOO().getDM();
+			cout << "\nThe shop for the OFFLINE ORDER: " << productRepo[i].getOFO().getShop();
 			cout << "\nThe due date: " << productRepo[i].getDate().zi << " / " << productRepo[i].getDate().luna << " / " << productRepo[i].getDate().an << endl;
 		}
 	}
@@ -300,6 +314,9 @@ void ProductRepo::displayAll()
 			cout << "\nName of the customer: " << productRepo[i].getCN();
 			cout << "\nThe wanted type: " << getType(productRepo[i].getType());
 			cout << "\nThe wanted model: " << productRepo[i].getModel();
+			cout << "\nThe website for the ONLINE ORDER: " << productRepo[i].getOO().getWeb();
+			cout << "\nThe choosed delivery method: " << productRepo[i].getOO().getDM();
+			cout << "\nThe shop for the OFFLINE ORDER: " << productRepo[i].getOFO().getShop();
 			cout << "\nThe due date: " << productRepo[i].getDate().zi << " / " << productRepo[i].getDate().luna << " / " << productRepo[i].getDate().an << endl;
 		}
 		cout << "\n\nPlease hit ENTER to continue.";
@@ -346,6 +363,8 @@ Product* ProductRepo::getProductRepo()
 	return productRepo;
 }
 
+//HELL BACK THERE 
+
 void ProductRepo::undoIt()
 {
 	if (undo_count != -1) {
@@ -381,6 +400,8 @@ void ProductRepo::undoIt()
 			productRedo[r_index].setCN(productRepo[c_index].getCN());
 			productRedo[r_index].setID(productRepo[c_index].getID());
 			productRedo[r_index].setType(productRepo[c_index].getType());
+			productRedo[r_index].setOO(productRepo[c_index].getOO());
+			productRedo[r_index].setOFO(productRepo[c_index].getOFO());
 			c_index--;
 			if (c_index == ((times * multiply) - (times - 1) * multiply))
 			{
@@ -438,7 +459,8 @@ void ProductRepo::undoIt()
 			productRepo[c_index].setCN(productUndo[u_index].getCN());
 			productRepo[c_index].setID(productUndo[u_index].getID());
 			productRepo[c_index].setType(productUndo[u_index].getType());
-
+			productRepo[c_index].setOO(productUndo[u_index].getOO());
+			productRepo[c_index].setOFO(productUndo[u_index].getOFO());
 
 			u_index--;
 			if (u_index == undo_u_times * multiply)
@@ -495,12 +517,17 @@ void ProductRepo::undoIt()
 			productRedo[r_index].setCN(productRepo[test].getCN());
 			productRedo[r_index].setID(productRepo[test].getID());
 			productRedo[r_index].setType(productRepo[test].getType());
+			productRedo[r_index].setOO(productRepo[test].getOO());
+			productRedo[r_index].setOFO(productRepo[test].getOFO());
 
 			productRepo[test].setDate(productUndo[u_index].getDate());
 			productRepo[test].setModel(productUndo[u_index].getModel());
 			productRepo[test].setCN(productUndo[u_index].getCN());
 			productRepo[test].setID(productUndo[u_index].getID());
 			productRepo[test].setType(productUndo[u_index].getType());
+			productRepo[test].setOO(productUndo[u_index].getOO());
+			productRepo[test].setOFO(productUndo[u_index].getOFO());
+			
 			cout << string(100, '\n');
 			cout << "Operation undid with succes! Hit ENTER to return to the menu";
 			cin.ignore();
@@ -553,6 +580,8 @@ void ProductRepo::redoIt()
 			productRepo[c_index].setCN(productRedo[r_index].getCN());
 			productRepo[c_index].setID(productRedo[r_index].getID());
 			productRepo[c_index].setType(productRedo[r_index].getType());
+			productRepo[c_index].setOO(productRedo[r_index].getOO());
+			productRepo[c_index].setOFO(productRedo[r_index].getOFO());
 
 			r_index--;
 			if (r_index == ((redo_u_times * multiply) - (redo_u_times - 1) * multiply))
@@ -614,6 +643,8 @@ void ProductRepo::redoIt()
 			productUndo[u_index].setCN(productRedo[r_index].getCN());
 			productUndo[u_index].setID(productRedo[r_index].getID());
 			productUndo[u_index].setType(productRedo[r_index].getType());
+			productUndo[u_index].setOO(productRedo[r_index].getOO());
+			productUndo[u_index].setOFO(productRedo[r_index].getOFO());
 
 			c_index--;
 			if (c_index == ((times * multiply) - (times - 1) * multiply))
@@ -682,13 +713,17 @@ void ProductRepo::redoIt()
 			productUndo[u_index].setCN(productRepo[test].getCN());
 			productUndo[u_index].setID(productRepo[test].getID());
 			productUndo[u_index].setType(productRepo[test].getType());
+			productUndo[u_index].setOO(productRepo[test].getOO());
+			productUndo[u_index].setOFO(productRepo[test].getOFO());
 
 			productRepo[test].setDate(productRedo[r_index].getDate());
 			productRepo[test].setModel(productRedo[r_index].getModel());
 			productRepo[test].setCN(productRedo[r_index].getCN());
 			productRepo[test].setID(productRedo[r_index].getID());
 			productRepo[test].setType(productRedo[r_index].getType());
-
+			productRepo[test].setOO(productRedo[r_index].getOO());
+			productRepo[test].setOFO(productRedo[r_index].getOFO());
+			
 			cout << string(100, '\n');
 			cout << "Operation redid with succes! Hit ENTER to return to the menu";
 			cin.ignore();

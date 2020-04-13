@@ -29,7 +29,7 @@ public:
 	
 	void addProduct(Product& prod);
 	void removeProduct(int id);
-	void updateProduct(int id, int type, char *model, char *customer_name, date_c date);
+	void updateProduct(int id, int type, char *model, char *customer_name, date_c date, OnlineOrder on, OfflineOrder off);
 
 	void displayByName(char *subname);
 	void displayByModelAndDate(char* model, date_c sdate);
